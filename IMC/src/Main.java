@@ -1,5 +1,8 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.ParseException;
 
 import javax.swing.BorderFactory;
@@ -25,10 +28,15 @@ public class Main {
     private static double imc;
     private static double altura;
     private static int peso;
+    private static FileWriter file;
+    private static PrintWriter gravarArq;
+    private static String path = "C:\\Programming/IMC/src/Folder/seu imc.txt";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException{
         
         frame = new JFrame("IMC");
+        file = new FileWriter(path);
+        gravarArq = new PrintWriter(file);
         calc = new JButton("calcular");
         altura_lb = new JLabel("Altura");
         peso_lb = new JLabel("Peso");
@@ -69,7 +77,7 @@ public class Main {
         altura_jtf.setBorder(BorderFactory.createLineBorder(Color.black));
         peso_jtf.setBorder(BorderFactory.createLineBorder(Color.black));
         calc.setBorder(BorderFactory.createLineBorder(Color.black));
-
+      
         calc.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -82,18 +90,23 @@ public class Main {
 
                if(imc < 18.5){
                     result.setText("magreza - obesidade 0");
+                    gravarArq.printf("Seu imc - %.2f\nPeso - %d Kg\nAltura - %.2f M\nMagreza - obesidade 0",imc,peso,altura);
                }else{
                 if(imc > 18.5 && imc < 24.9){
                     result.setText("Normal - obesidade 0");
+                    gravarArq.printf("Seu imc - %.2f\nPeso - %d Kg\nAltura - %.2f M\nNormal - obesidade 0",imc,peso,altura);
                    }else{
                     if (imc > 25 && imc < 29.9 ) {
                         result.setText("Acima do peso - obesidade |");
+                        gravarArq.printf("Seu imc - %.2f\nPeso - %d Kg\nAltura - %.2f M\nAcima do peso - obesidade |",imc,peso,altura);
                        }else{
                         if (imc > 30 && imc < 39.9 ) {
                             result.setText("Obesidade - obesidade ||");
+                            gravarArq.printf("Seu imc - %.2f\nPeso - %d Kg\nAltura - %.2f M\nObesidade - obesidade ||",imc,peso,altura);
                            }else{
                             if (imc >= 40) {
                                 result.setText("Obesidade grave- obesidade |||");
+                                gravarArq.printf("Seu imc - %.2f\nPeso - %d Kg\nAltura - %.2f M\nObesidade Grave - obesidade |||",imc,peso,altura);
                               }
                            }
                            
@@ -101,11 +114,19 @@ public class Main {
                      
                    }
 
-               }                    
-
+               }
+               
+            try {
+                file.close();
+            } catch (IOException e1) {
+                System.err.println("Erro ao fechar arquivo");
+            }
+               
             }      
         } );
-        
+
+       
+
     }
 
 }
